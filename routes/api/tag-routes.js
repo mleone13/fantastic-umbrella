@@ -5,20 +5,16 @@ const { Tag, Product, ProductTag, Category } = require('../../models');
 
 router.get('/', (req, res) => {
   // find all tags
-  Tag.findOne({where:{id:req.params.id},include:[Category,{model:Product, through:ProductTag}]})
-  .then(dbTagData => {
-    if(!dbTagData) {
-      res.status(404).json({ message: 'No category found.'});
-      return;
-    }
-    res.json(dbTagData)
-  })
+  Tag.findAll()
+  .then(dbTagData => res.json(dbTagData))
   .catch(err => {
     console.log(err);
     res.status(500).json(err);
   });
-  // be sure to include its associated Product data
 });
+    
+  // be sure to include its associated Product data
+
 
 router.get('/:id', (req, res) => {
   // find a single tag by its `id`
@@ -36,7 +32,7 @@ router.post('/', (req, res) => {
   Tag.create({
     tag_name: req.body.tag_name,
   })
-  .then(dbCategoryData => res.json (dbCategoryData))
+  .then(dbTagData => res.json (dbTagData))
   .catch (err => {
     console.log(err);
     res.status(400).json(err);
@@ -60,12 +56,12 @@ router.delete('/:id', (req, res) => {
       id: req.params.id
     }
   })
-  .then(dbCategoryData => {
-    if(!dbCategoryData) {
+  .then(dbTagData => {
+    if(!dbTagData) {
       res.status(404).json({ message: 'No category found.'});
       return;
     }
-    res.json(dbCategoryData)
+    res.json(dbTagData)
   })
   .catch(err => {
     console.log(err);
